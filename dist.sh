@@ -149,16 +149,7 @@ sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/c
   sudo /opt/bitnami/apps/wordpress/bnconfig --disable_banner 1
   
   
-  
-    printf -- "\033[33m Adding security Features....... \033[0m";
-     load_spinner
-     sudo echo "<Directory \"/opt/bitnami/apps/wordpress/htdocs\">
-      RewriteEngine on
-      RewriteCond %{HTTP_HOST} ^${PUBLIC_IP}
-      RewriteRule (.*) https://${SITE_URL}/$1 [R=301,L]
-      </Directory>
-      " >> /opt/bitnami/apps/wordpress/conf/htaccess.conf
-  
+ 
   sudo /opt/bitnami/ctlscript.sh restart apache
 }
 
