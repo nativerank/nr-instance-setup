@@ -1,11 +1,6 @@
 # lightsail-setup
 Scripts used to set up the lightsail instance
 
-## Code Of Conduct
-
-- Only use dist.sh for production build
-- For beta testing, either create a new branch or create a beta-VERSION.sh file in master branch
-- Feel free to create scratch-VERSION.sh files
 
 ## Usage
 
@@ -16,3 +11,10 @@ Scripts used to set up the lightsail instance
 
 - Make sure you replace **www.DOMAIN.com** with your domain &  **devsite_slug** with your slug
 
+## Development
+
+### Code Of Conduct
+
+- Only use dist.sh for production build
+- For beta testing, either create a new branch or create a beta-VERSION.sh file in master branch
+- Feel free to create scratch-VERSION.sh files
