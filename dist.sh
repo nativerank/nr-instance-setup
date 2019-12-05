@@ -144,6 +144,13 @@ sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/c
   sudo sed -i "s/ModPagespeed on/ModPagespeed on\nModPagespeedRespectXForwardedProto on\nModPagespeedLoadFromFile \"https:\/\/${SITE_URL}\/\" \"\/opt\/bitnami\/apps\/wordpress\/htdocs\/\"\n/g" /opt/bitnami/apache2/conf/pagespeed.conf
   sudo sed -i "s/inline_css/inline_css,hint_preload_subresources/g" /opt/bitnami/apache2/conf/pagespeed.conf
   
+    printf -- "\033[33m Adding data-pagespeed-no-transform attribute to shortcut icon and apple touch icon in header.php....... \033[0m";
+    load_spinner
+  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/ -name "header.php" -exec sed -i 's/link rel="apple-touch-icon-precomposed" href/link rel="apple-touch-icon-precomposed" data-pagespeed-no-transform href/g' {} +
+  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme-child/ -name "header.php" -exec sed -i 's/link rel="apple-touch-icon-precomposed" href/link rel="apple-touch-icon-precomposed" data-pagespeed-no-transform href/g' {} +
+  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/ -name "header.php" -exec sed -i 's/link rel="shortcut icon" href/link rel="shortcut icon" data-pagespeed-no-transform href/g' {} +
+  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme-child/ -name "header.php" -exec sed -i 's/link rel="shortcut icon" href/link rel="shortcut icon" data-pagespeed-no-transform href/g' {} +
+  
     printf -- "\033[33m Removing Bitnami banner and restarting apache....... \033[0m";
     load_spinner
   sudo /opt/bitnami/apps/wordpress/bnconfig --disable_banner 1
