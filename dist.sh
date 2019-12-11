@@ -140,10 +140,12 @@ initiate_lighsailScript() {
   load_spinner
   sudo /opt/bitnami/apps/wordpress/bnconfig --disable_banner 1
 
-  printf -- "\033[33m Setting up and activating W3 Total Cache....... \033[0m"
+  printf -- "\033[33m Setting up and activating Redis and W3 Total Cache....... \033[0m"
   load_spinner
+  sudo -u daemon wp redis enable
   sudo -u daemon wp plugin activate w3-total-cache
-  sudo sed -i "s/<?php/<?php\n\/** Enable W3 Total Cache *\/\ndefine('WP_CACHE', true); \/\/ Added by W3 Total Cache/g" /opt/bitnami/apps/wordpress/htdocs/wp-config.php
+  sudo -u daemon wp config set WP_CACHE true --add --raw --type=constant
+  sudo -u daemon wp cache flush
 
   printf -- "\033[33m Restarting apache....... \033[0m"
   load_spinner
