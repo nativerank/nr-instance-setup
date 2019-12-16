@@ -144,7 +144,7 @@ initiate_lighsailScript() {
   load_spinner
   sudo -u daemon wp redis enable
   sudo -u daemon wp plugin activate w3-total-cache
-  sudo -u daemon wp config set WP_CACHE true --add --raw --type=constant
+  wp config set WP_CACHE true --add --raw --type=constant
   sudo -u daemon wp cache flush
 
   printf -- "\033[33m Restarting apache....... \033[0m"
