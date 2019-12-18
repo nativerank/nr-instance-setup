@@ -143,11 +143,11 @@ initiate_lighsailScript() {
   printf -- "\033[33m Setting up and activating Redis and W3 Total Cache....... \033[0m"
   load_spinner
   sudo apt-get install redis-server
+  read -rsp $'Press any key to continue...\n' -n1 key
   sudo -u daemon wp redis enable
   sudo -u daemon wp plugin activate w3-total-cache
   sudo wp config set WP_CACHE true --raw --type=constant --allow-root
-  wp cache flush
-
+  sudo -u daemon wp cache flush --skip-plugins=w3-total-cache
   printf -- "\033[33m Restarting apache....... \033[0m"
   load_spinner
   sudo /opt/bitnami/ctlscript.sh restart apache
