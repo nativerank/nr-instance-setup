@@ -16,7 +16,7 @@ for i in "$@"; do
   -s=* | --site-url=*)
     SITE_URL="${i#*=}"
     ;;
-  -noredis*)
+  --noredis*)
     $REDIS=0
   --default)
     DEFAULT=YES
