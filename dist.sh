@@ -17,7 +17,7 @@ for i in "$@"; do
     SITE_URL="${i#*=}"
     ;;
   -noredis*)
-    REDIS=0
+    $REDIS=0
   --default)
     DEFAULT=YES
     ;;
@@ -143,7 +143,7 @@ initiate_lighsailScript() {
   load_spinner
   sudo /opt/bitnami/apps/wordpress/bnconfig --disable_banner 1
   
-  if [ REDIS ]; then
+  if [[ $REDIS ]]; then
     printf -- "\033[33m Setting up and activating Redis Object Cache....... \033[0m"
     load_spinner
     sudo apt-get install redis-server -y
