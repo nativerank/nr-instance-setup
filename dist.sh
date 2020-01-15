@@ -66,6 +66,12 @@ if [[ "${SITE_URL}" == *. ]]; then
   exit 64
 fi
 
+if [[ "${SITE_URL}" == DOMAIN.com ]]; then
+  printf -- "\033[31m ERROR: Be sure to replace DOMAIN.com with the domain for this account \033[0m\n"
+  printf -- "\033[32m CORRECT SYNTAX ---> ${FORMAT} \033[0m\n"
+  exit 64
+fi
+
 load_spinner() {
   sp='/-\|'
   printf ' '
