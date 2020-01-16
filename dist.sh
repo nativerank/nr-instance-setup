@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 FORMAT="--dev-slug=my-slug --site-url=www.domain.com"
+REDIS=1
 
 if [[ -z "$1" ]] || [[ -z "$2" ]]; then
   printf -- "\033[31m ERROR: Invalid or no argument supplied \033[0m\n"
@@ -15,6 +16,8 @@ for i in "$@"; do
   -s=* | --site-url=*)
     SITE_URL="${i#*=}"
     ;;
+  --noredis*)
+    $REDIS=0
   --default)
     DEFAULT=YES
     ;;
@@ -62,6 +65,12 @@ fi
 
 if [[ "${SITE_URL}" == *. ]]; then
   printf -- "\033[31m ERROR: Site Url can not end with a period (.) \033[0m\n"
+  printf -- "\033[32m CORRECT SYNTAX ---> ${FORMAT} \033[0m\n"
+  exit 64
+fi
+
+if [[ "${SITE_URL}" == www.DOMAIN.com ]]; then
+  printf -- "\033[31m ERROR: Be sure to replace DOMAIN.com with the domain for this account \033[0m\n"
   printf -- "\033[32m CORRECT SYNTAX ---> ${FORMAT} \033[0m\n"
   exit 64
 fi
@@ -133,20 +142,27 @@ initiate_lighsailScript() {
 
   printf -- "\033[33m Adding default Pagespeed configuration....... \033[0m"
   load_spinner
-  sudo sed -i "s/ModPagespeed on/ModPagespeed on\nModPagespeedRespectXForwardedProto on\nModPagespeedLoadFromFile \"https:\/\/${SITE_URL}\/\" \"\/opt\/bitnami\/apps\/wordpress\/htdocs\/\"\n/g" /opt/bitnami/apache2/conf/pagespeed.conf
-  sudo sed -i "s/inline_css/inline_css,hint_preload_subresources/g" /opt/bitnami/apache2/conf/pagespeed.conf
+sudo sed -i "s/ModPagespeed on/ModPagespeed on\nModPagespeedRespectXForwardedProto on\nModPagespeedLoadFromFile \"https:\/\/${SITE_URL}\/\" \"\/opt\/bitnami\/apps\/wordpress\/htdocs\/\"\nModPagespeedDisallow \"*favicon*\"/g" /opt/bitnami/apache2/conf/pagespeed.conf  sudo sed -i "s/inline_css/inline_css,hint_preload_subresources/g" /opt/bitnami/apache2/conf/pagespeed.conf
 
   printf -- "\033[33m Removing Bitnami banner....... \033[0m"
   load_spinner
   sudo /opt/bitnami/apps/wordpress/bnconfig --disable_banner 1
+  
+  if [[ $REDIS ]]; then
+    printf -- "\033[33m Setting up and activating Redis Object Cache....... \033[0m"
+    load_spinner
+    sudo apt-get install redis-server -y
+    sudo -u daemon wp redis enable
+  fi
 
-  printf -- "\033[33m Setting up and activating Redis and W3 Total Cache....... \033[0m"
+  printf -- "\033[33m Setting up and activating W3 Total Cache....... \033[0m"
   load_spinner
   sudo apt-get install redis-server -y
   sudo -u daemon wp redis enable
   sudo -u daemon wp plugin activate w3-total-cache
   sudo wp config set WP_CACHE true --raw --type=constant --allow-root
   sudo -u daemon wp cache flush --skip-plugins=w3-total-cache
+  
   printf -- "\033[33m Restarting apache....... \033[0m"
   load_spinner
   sudo /opt/bitnami/ctlscript.sh restart apache
