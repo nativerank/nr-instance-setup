@@ -18,6 +18,7 @@ for i in "$@"; do
     ;;
   --noredis*)
     $REDIS=0
+    ;;
   --default)
     DEFAULT=YES
     ;;
