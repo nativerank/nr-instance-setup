@@ -143,7 +143,8 @@ initiate_lighsailScript() {
 
   printf -- "\033[33m Adding default Pagespeed configuration....... \033[0m"
   load_spinner
-sudo sed -i "s/ModPagespeed on/ModPagespeed on\nModPagespeedRespectXForwardedProto on\nModPagespeedLoadFromFile \"https:\/\/${SITE_URL}\/\" \"\/opt\/bitnami\/apps\/wordpress\/htdocs\/\"\nModPagespeedDisallow \"*favicon*\"/g" /opt/bitnami/apache2/conf/pagespeed.conf  sudo sed -i "s/inline_css/inline_css,hint_preload_subresources/g" /opt/bitnami/apache2/conf/pagespeed.conf
+sudo sed -i "s/ModPagespeed on/ModPagespeed on\nModPagespeedRespectXForwardedProto on\nModPagespeedLoadFromFile \"https:\/\/${SITE_URL}\/\" \"\/opt\/bitnami\/apps\/wordpress\/htdocs\/\"\nModPagespeedDisallow \"*favicon*\"/g" /opt/bitnami/apache2/conf/pagespeed.conf  
+sudo sed -i "s/inline_css/inline_css,hint_preload_subresources/g" /opt/bitnami/apache2/conf/pagespeed.conf
 
   printf -- "\033[33m Removing Bitnami banner....... \033[0m"
   load_spinner
