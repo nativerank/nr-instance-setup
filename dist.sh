@@ -163,6 +163,10 @@ sudo sed -i "s/inline_css/inline_css,hint_preload_subresources/g" /opt/bitnami/a
   sudo -u daemon wp redis enable
   sudo -u daemon wp plugin activate w3-total-cache
   sudo wp config set WP_CACHE true --raw --type=constant --allow-root
+  sudo curl -L -o /opt/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/w3-master-settings.json https://raw.githubusercontent.
+com/nativerank/wordpress-child-theme/master/w3-cache-master.json?token=ALQGPI7NNXRXVULW5PT3LHC6JKYT2
+  sudo -u daemon wp w3-total-cache import /opt/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/w3-master-settings.json
+  sudo -u daemon wp w3-total-cache flush all
   sudo -u daemon wp cache flush --skip-plugins=w3-total-cache
   
   printf -- "\033[33m Restarting apache....... \033[0m"
