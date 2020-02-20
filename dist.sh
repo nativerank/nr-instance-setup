@@ -17,10 +17,10 @@ for i in "$@"; do
   -s=* | --site-url=*)
     SITE_URL="${i#*=}"
     ;;
-  --noredis*)
+  --skip-redis*)
     $REDIS=0
     ;;
-  --nopagespeed
+  --skip-pagespeed*)
     $PAGESPEED=0
     ;;
   --default)
@@ -169,7 +169,7 @@ fi
   sudo -u daemon wp redis enable
   sudo -u daemon wp plugin activate w3-total-cache
   sudo wp config set WP_CACHE true --raw --type=constant --allow-root
-  sudo curl -L -o /opt/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/w3-master-settings.json https://raw.githubusercontent.com/nativerank/wordpress-child-theme/master/w3-cache-master.json?token=ALQGPI7NNXRXVULW5PT3LHC6JKYT2
+  sudo curl -L -o /opt/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/w3-master-settings.json https://gist.githubusercontent.com/mitchierichie/407650947716956e9426545d6c240749/raw/64839e1406a4ee78d36864a1697a6cd91738bb30/w3-cache-master.json
   sudo -u daemon wp w3-total-cache import /opt/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/w3-master-settings.json
   sudo -u daemon wp w3-total-cache flush all
   sudo -u daemon wp cache flush --skip-plugins=w3-total-cache
