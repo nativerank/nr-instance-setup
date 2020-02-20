@@ -10,7 +10,7 @@ Scripts used to set up the lightsail instance
 ```
 
 ## Additional options
-| options | description |
+| option | description |
 | --------|:-----------:|
 | --skip-pagespeed | do not optimize pagespeed config file |
 | --skip-redis | do not install redis-server |
