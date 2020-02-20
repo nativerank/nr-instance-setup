@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 FORMAT="--dev-slug=my-slug --site-url=www.domain.com"
 REDIS=1
+PAGESPEED=1
 
 if [[ -z "$1" ]] || [[ -z "$2" ]]; then
   printf -- "\033[31m ERROR: Invalid or no argument supplied \033[0m\n"
@@ -16,8 +17,11 @@ for i in "$@"; do
   -s=* | --site-url=*)
     SITE_URL="${i#*=}"
     ;;
-  --noredis*)
+  --skip-redis*)
     $REDIS=0
+    ;;
+  --skip-pagespeed*)
+    $PAGESPEED=0
     ;;
   --default)
     DEFAULT=YES
@@ -141,10 +145,12 @@ initiate_lighsailScript() {
   wp config set WP_SITEURL "https://${SITE_URL}"
   wp config set WP_HOME "https://${SITE_URL}"
 
+if [[ $PAGESPEED ]]; then
   printf -- "\033[33m Adding default Pagespeed configuration....... \033[0m"
   load_spinner
-sudo sed -i "s/ModPagespeed on/ModPagespeed on\nModPagespeedRespectXForwardedProto on\nModPagespeedLoadFromFile \"https:\/\/${SITE_URL}\/\" \"\/opt\/bitnami\/apps\/wordpress\/htdocs\/\"\nModPagespeedDisallow \"*favicon*\"/g" /opt/bitnami/apache2/conf/pagespeed.conf  
+sudo sed -i "s/ModPagespeed on/ModPagespeed on\nModPagespeedInPlaceSMaxAgeSec -1\nModPagespeedRespectXForwardedProto on\nModPagespeedLoadFromFile \"https:\/\/${SITE_URL}\/\" \"\/opt\/bitnami\/apps\/wordpress\/htdocs\/\"\nModPagespeedDisallow \"*favicon*\"/g" /opt/bitnami/apache2/conf/pagespeed.conf  
 sudo sed -i "s/inline_css/inline_css,hint_preload_subresources/g" /opt/bitnami/apache2/conf/pagespeed.conf
+fi
 
   printf -- "\033[33m Removing Bitnami banner....... \033[0m"
   load_spinner
@@ -163,7 +169,7 @@ sudo sed -i "s/inline_css/inline_css,hint_preload_subresources/g" /opt/bitnami/a
   sudo -u daemon wp redis enable
   sudo -u daemon wp plugin activate w3-total-cache
   sudo wp config set WP_CACHE true --raw --type=constant --allow-root
-  sudo curl -L -o /opt/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/w3-master-settings.json https://raw.githubusercontent.com/nativerank/wordpress-child-theme/master/w3-cache-master.json?token=ALQGPI7NNXRXVULW5PT3LHC6JKYT2
+  sudo curl -L -o /opt/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/w3-master-settings.json https://gist.githubusercontent.com/mitchierichie/407650947716956e9426545d6c240749/raw/64839e1406a4ee78d36864a1697a6cd91738bb30/w3-cache-master.json
   sudo -u daemon wp w3-total-cache import /opt/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/w3-master-settings.json
   sudo -u daemon wp w3-total-cache flush all
   sudo -u daemon wp cache flush --skip-plugins=w3-total-cache
