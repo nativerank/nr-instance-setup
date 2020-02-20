@@ -5,6 +5,9 @@ Scripts used to set up the lightsail instance
 ## Usage
 
 - Copy and Paste this code and wait for the success message.
+
+| :warning: Make sure you replace **www.DOMAIN.com** with your domain &  **devsite_slug** with your slug |
+| --- |
 ```bash
  curl https://raw.githubusercontent.com/nativerank/nr-instance-setup/master/dist.sh | bash -s -- --dev-slug=devsite_slug --site-url=www.DOMAIN.com
 ```
@@ -15,7 +18,6 @@ Scripts used to set up the lightsail instance
 | --skip-pagespeed | do not optimize pagespeed config file |
 | --skip-redis | do not install redis-server |
 
-- Make sure you replace **www.DOMAIN.com** with your domain &  **devsite_slug** with your slug
 
 ## Development
 
