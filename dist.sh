@@ -156,16 +156,17 @@ fi
   load_spinner
   sudo /opt/bitnami/apps/wordpress/bnconfig --disable_banner 1
   
+  printf -- "\033[33m Updating Redis Object Cache WP Plugin....... \033[0m"
+  sudo wp plugin update redis-cache --allow-root
+  
   if [[ $REDIS ]]; then
-    printf -- "\033[33m Setting up and activating Redis Object Cache....... \033[0m"
+    printf -- "\033[33m Setting up and activating Redis Server....... \033[0m"
     load_spinner
     sudo apt-get install redis-server -y
     sudo -u daemon wp redis enable
   fi
   
-  printf -- "\033[33m Updating Redis Object Cache....... \033[0m"
-  sudo apt-get update
-  sudo apt-get --only-upgrade install redis-server
+
 
   printf -- "\033[33m Setting up and activating W3 Total Cache....... \033[0m"
   load_spinner
