@@ -163,7 +163,7 @@ fi
     printf -- "\033[33m Setting up and activating Redis Server....... \033[0m"
     load_spinner
     sudo apt-get install redis-server -y
-    sudo -u daemon wp redis enable
+    sudo -u daemon wp redis enable --skip-plugins=w3-total-cache
   fi
   
 
