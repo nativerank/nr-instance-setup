@@ -165,16 +165,11 @@ fi
     sudo apt-get install redis-server -y
     sudo -u daemon wp redis enable
   fi
-  
 
-
-  printf -- "\033[33m Setting up and activating W3 Total Cache....... \033[0m"
+  printf -- "\033[33m Activating WP Rocket plugin and setting WP_CACHE....... \033[0m"
   load_spinner
-  sudo -u daemon wp plugin activate w3-total-cache
   sudo wp config set WP_CACHE true --raw --type=constant --allow-root
-  sudo curl -L -o /opt/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/w3-master-settings.json https://gist.githubusercontent.com/mitchierichie/407650947716956e9426545d6c240749/raw/64839e1406a4ee78d36864a1697a6cd91738bb30/w3-cache-master.json
-  sudo -u daemon wp w3-total-cache import /opt/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/w3-master-settings.json
-  sudo -u daemon wp w3-total-cache flush all
+  wp plugin activate wp-rocket
   sudo -u daemon wp cache flush --skip-plugins=w3-total-cache
   
   printf -- "\033[33m Restarting apache....... \033[0m"
