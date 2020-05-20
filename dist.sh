@@ -158,6 +158,8 @@ fi
   
   printf -- "\033[33m Updating Redis Object Cache WP Plugin....... \033[0m"
   sudo wp plugin update redis-cache --allow-root
+
+# Set right permission
   sudo chown -R daemon:daemon /opt/bitnami/apps/wordpress/htdocs/wp-content/plugins/redis-cache 
   
   if [[ $REDIS ]]; then
