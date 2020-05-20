@@ -168,8 +168,8 @@ fi
 
   printf -- "\033[33m Activating WP Rocket plugin and setting WP_CACHE....... \033[0m"
   load_spinner
-  sudo wp config set WP_CACHE true --raw --type=constant --allow-root
-  wp plugin activate wp-rocket
+  wp config set WP_CACHE true --raw --type=constant
+  sudo -u daemon wp plugin activate wp-rocket
   wp config set WP_ROCKET_CF_API_KEY 1ff24a7ac86219650211952b4fceaf93061a4 --type=constant
   wp config set WP_ROCKET_CF_API_KEY_HIDDEN true --raw --type=constant
   sudo -u daemon wp cache flush --skip-plugins=w3-total-cache
