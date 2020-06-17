@@ -129,6 +129,11 @@ initiate_lighsailScript() {
 
   sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/css/ -name "*.css" -exec sed -i "s/nativerank.dev\/${DEVSITE_SLUG}//g" {} +
 
+  printf -- "\033[33m Running the same replacements on custom.js\n"
+  load_spinner
+  
+  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/js/ -name "custom.js" -exec sed -i "s/nativerank.dev\/${DEVSITE_SLUG}//g" {} +
+
   printf -- "\033[33m Running the same replacements on data.json\n"
   load_spinner
   
