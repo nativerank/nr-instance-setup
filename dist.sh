@@ -180,7 +180,7 @@ fi
   load_spinner
   wp config set WP_CACHE true --raw --type=constant
   sudo -u daemon wp plugin activate wp-rocket
-  wp config set WP_ROCKET_CF_API_KEY 1ff24a7ac86219650211952b4fceaf93061a4 --type=constant
+  wp config set WP_ROCKET_CF_API_KEY NONONO --type=constant
   wp config set WP_ROCKET_CF_API_KEY_HIDDEN true --raw --type=constant
   sudo -u daemon wp cache flush --skip-plugins=w3-total-cache
 
