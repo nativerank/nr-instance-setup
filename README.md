@@ -6,10 +6,10 @@ Scripts used to set up the lightsail instance
 
 - Copy and Paste this code and wait for the success message.
 
-| :warning: Make sure you replace **www.DOMAIN.com** with your domain &  **devsite_slug** with your slug |
+| :warning: Make sure you replace **www.DOMAIN.com** with your domain  |
 | --- |
 ```bash
- curl https://raw.githubusercontent.com/nativerank/nr-instance-setup/master/dist.sh | bash -s -- --dev-slug=devsite_slug --site-url=www.DOMAIN.com
+ curl https://raw.githubusercontent.com/nativerank/nr-instance-setup/master/dist.sh | bash -s -- --site-url=www.DOMAIN.com
 ```
 
 ## Additional options
