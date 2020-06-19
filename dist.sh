@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-FORMAT="--dev-slug=my-slug --site-url=www.domain.com"
+FORMAT="--site-url=www.domain.com"
 REDIS=1
 PAGESPEED=1
 
