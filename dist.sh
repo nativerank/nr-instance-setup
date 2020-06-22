@@ -103,33 +103,33 @@ initiate_lighsailScript() {
 
   printf -- " Running the same replacements on Less and CSS....... \n"
 
-  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/less/src/ -name "*.less" -exec sed -i "s/nrdevsites.com/nativerank.dev/g" {} +
-  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/less/src/ -name "*.less" -exec sed -i "s/www.nativerank.dev/nativerank.dev/g" {} +
+  sudo -u daemon find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/less/src/ -name "*.less" -exec sed -i "s/nrdevsites.com/nativerank.dev/g" {} +
+  sudo -u daemon find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/less/src/ -name "*.less" -exec sed -i "s/www.nativerank.dev/nativerank.dev/g" {} +
 
-  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/less/src/ -name "*.less" -exec sed -i "s/http:/https:/g" {} +
-  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/less/src/ -name "*.less" -exec sed -i "s/https:\/\/nativerank.dev/nativerank.dev/g" {} +
+  sudo -u daemon find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/less/src/ -name "*.less" -exec sed -i "s/http:/https:/g" {} +
+  sudo -u daemon find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/less/src/ -name "*.less" -exec sed -i "s/https:\/\/nativerank.dev/nativerank.dev/g" {} +
 
-  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/less/src/ -name "*.less" -exec sed -i "s/nativerank.dev\/${DEVSITE_SLUG}//g" {} +
+  sudo -u daemon find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/less/src/ -name "*.less" -exec sed -i "s/nativerank.dev\/${DEVSITE_SLUG}//g" {} +
 
-  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/css/ -name "*.css" -exec sed -i "s/nrdevsites.com/nativerank.dev/g" {} +
-  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/css/ -name "*.css" -exec sed -i "s/www.nativerank.dev/nativerank.dev/g" {} +
+  sudo -u daemon find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/css/ -name "*.css" -exec sed -i "s/nrdevsites.com/nativerank.dev/g" {} +
+  sudo -u daemon find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/css/ -name "*.css" -exec sed -i "s/www.nativerank.dev/nativerank.dev/g" {} +
 
-  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/css/ -name "*.css" -exec sed -i "s/http:/https:/g" {} +
-  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/css/ -name "*.css" -exec sed -i "s/https:\/\/nativerank.dev/nativerank.dev/g" {} +
+  sudo -u daemon find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/css/ -name "*.css" -exec sed -i "s/http:/https:/g" {} +
+  sudo -u daemon find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/css/ -name "*.css" -exec sed -i "s/https:\/\/nativerank.dev/nativerank.dev/g" {} +
 
-  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/css/ -name "*.css" -exec sed -i "s/nativerank.dev\/${DEVSITE_SLUG}//g" {} +
+  sudo -u daemon find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/css/ -name "*.css" -exec sed -i "s/nativerank.dev\/${DEVSITE_SLUG}//g" {} +
 
   printf -- " Running the same replacements on data.json....... \n"
 
 
-  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/ -name "data.json" -exec sed -i "s/nativerank.dev\/${DEVSITE_SLUG}//g" {} +
+  sudo -u daemon find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/ -name "data.json" -exec sed -i "s/nativerank.dev\/${DEVSITE_SLUG}//g" {} +
 
   printf -- " Running the same replacements for Handlebars templates....... \n"
 
-  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/templates/ -name "*.hbs" -exec sed -i "s/nrdevsites.com/nativerank.dev/g" {} +
-  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/templates/ -name "*.hbs" -exec sed -i "s/www.nativerank.dev/nativerank.dev/g" {} +
-  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/templates/ -name "*.hbs" -exec sed -i "s/nativerank.dev\/${DEVSITE_SLUG}/${SITE_URL}/g" {} +
-  sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/templates/ -name "*.hbs" -exec sed -i "s/http:\/\/${SITE_URL}/https:\/\/${SITE_URL}/g" {} +
+  sudo -u daemon find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/templates/ -name "*.hbs" -exec sed -i "s/nrdevsites.com/nativerank.dev/g" {} +
+  sudo -u daemon find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/templates/ -name "*.hbs" -exec sed -i "s/www.nativerank.dev/nativerank.dev/g" {} +
+  sudo -u daemon find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/templates/ -name "*.hbs" -exec sed -i "s/nativerank.dev\/${DEVSITE_SLUG}/${SITE_URL}/g" {} +
+  sudo -u daemon find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/templates/ -name "*.hbs" -exec sed -i "s/http:\/\/${SITE_URL}/https:\/\/${SITE_URL}/g" {} +
 
   printf -- " Making it secure [http -> https]....... \n"
 
@@ -152,10 +152,7 @@ fi
   sudo /opt/bitnami/apps/wordpress/bnconfig --disable_banner 1
 
   printf -- " Updating Redis Object Cache WP Plugin....... \n"
-  sudo wp plugin update redis-cache --allow-root
-
-# Set right permission
-  sudo chown -R daemon:daemon /opt/bitnami/apps/wordpress/htdocs/wp-content/plugins/redis-cache
+  sudo -u daemon wp plugin update redis-cache
 
   if [[ $REDIS ]]; then
     printf -- " Setting up and activating Redis Server....... \n"
@@ -180,6 +177,7 @@ fi
   if [[ -n "$ZONE_ID" ]]; then
     wp option patch update wp_rocket_settings do_cloudflare 1
     wp option patch insert wp_rocket_settings cloudflare_zone_id "$ZONE_ID"
+    wp plugin deactivate cloudflare
   fi
   
   printf -- " Restarting apache....... \n"
