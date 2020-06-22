@@ -192,5 +192,4 @@ printf -- " Initiating scripts... \n"
 initiate_lighsailScript
 wait
 printf -- " Successfully migrated ${DEVSITE_SLUG} -> ${SITE_URL}. \n"
-wp option update
 exit 0
