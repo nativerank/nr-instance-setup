@@ -7,8 +7,8 @@ DEVSITE_SLUG=$(wp option get wp_nr_dev_slug)
 CLOUDFLARE_API_KEY=$(wp option pluck wp_rocket_settings cloudflare_api_key)
 
 if [[ -z "$1" ]] || [[ -z "$DEVSITE_SLUG" ]]; then
-  printf -- "\033[31m ERROR: Invalid or no argument supplied \033[0m\n"
-  printf -- "\033[32m CORRECT SYNTAX ---> ${FORMAT} \033[0m\n"
+  printf -- " Invalid or no argument supplied \n"
+  printf -- " CORRECT SYNTAX ---> ${FORMAT} \n"
   exit 64
 fi
 
@@ -32,51 +32,45 @@ for i in "$@"; do
   esac
 done
 
-#if [ -z "$DEFAULT" ]; then
-#    echo "Error: Wrong Syntax";
-#    echo ${FORMAT}
-#    exit 1
-# fi
-
 if [[ $DEVSITE_SLUG == *.* ]]; then
-  printf -- "\033[31m Devsite Slug con not contain a period (.) \033[0m\n"
-  printf -- "\033[32m CORRECT SYNTAX ---> ${FORMAT} \033[0m\n"
+  printf -- " Devsite Slug can not contain a period (.) \n"
+  printf -- " CORRECT SYNTAX ---> ${FORMAT} \n"
   exit 64
 fi
 
 if [[ $DEVSITE_SLUG == */* ]]; then
-  printf -- "\033[31m Devsite Slug con not contain a slash (/) \033[0m\n"
-  printf -- "\033[32m CORRECT SYNTAX ---> ${FORMAT} \033[0m\n"
+  printf -- " Devsite Slug can not contain a slash (/) \n"
+  printf -- " CORRECT SYNTAX ---> ${FORMAT} \n"
   exit 64
 fi
 
 if [[ $SITE_URL == *http* ]]; then
-  printf -- "\033[31m ERROR: Site Url can not contain http \033[0m\n"
-  printf -- "\033[32m CORRECT SYNTAX ---> ${FORMAT} \033[0m\n"
+  printf -- " ERROR: Site Url can not contain http \n"
+  printf -- " CORRECT SYNTAX ---> ${FORMAT} \n"
   exit 64
 fi
 
 if [[ $SITE_URL != www* ]]; then
-  printf -- "\033[31m ERROR: Wrong Site URL format \033[0m\n"
-  printf -- "\033[32m CORRECT SYNTAX ---> ${FORMAT} \033[0m\n"
+  printf -- " ERROR: Wrong Site URL format \n"
+  printf -- " CORRECT SYNTAX ---> ${FORMAT} \n"
   exit 64
 fi
 
 if [[ "${SITE_URL}" == */* ]]; then
-  printf -- "\033[31m ERROR: Site Url can not contain a slash (/) \033[0m\n"
-  printf -- "\033[32m CORRECT SYNTAX ---> ${FORMAT} \033[0m\n"
+  printf -- " ERROR: Site Url can not contain a slash (/) \n"
+  printf -- " CORRECT SYNTAX ---> ${FORMAT} \n"
   exit 64
 fi
 
 if [[ "${SITE_URL}" == *. ]]; then
-  printf -- "\033[31m ERROR: Site Url can not end with a period (.) \033[0m\n"
-  printf -- "\033[32m CORRECT SYNTAX ---> ${FORMAT} \033[0m\n"
+  printf -- " ERROR: Site Url can not end with a period (.) \n"
+  printf -- " CORRECT SYNTAX ---> ${FORMAT} \n"
   exit 64
 fi
 
 if [[ "${SITE_URL}" == www.DOMAIN.com ]]; then
-  printf -- "\033[31m ERROR: Be sure to replace DOMAIN.com with the domain for this account \033[0m\n"
-  printf -- "\033[32m CORRECT SYNTAX ---> ${FORMAT} \033[0m\n"
+  printf -- " ERROR: Be sure to replace DOMAIN.com with the domain for this account \n"
+  printf -- " CORRECT SYNTAX ---> ${FORMAT} \n"
   exit 64
 fi
 
@@ -96,22 +90,18 @@ load_spinner() {
 
 initiate_lighsailScript() {
   PUBLIC_IP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
-  printf -- "\033[33m Replace PUBLIC IP with production URL....... \033[0m"
-  load_spinner
+  printf -- " Replace PUBLIC IP with production URL....... \n"
   sudo -u daemon wp search-replace "${PUBLIC_IP}" "${SITE_URL}" --skip-plugins=w3-total-cache
   sudo -u daemon wp search-replace "nrdevsites.com" "nativerank.dev" --skip-plugins=w3-total-cache
   sudo -u daemon wp search-replace "www.nativerank.dev" "nativerank.dev" --skip-plugins=w3-total-cache
 
-  printf -- "\033[33m Replacing devsite slug (escaped) with production URL....... \033[0m"
-  load_spinner
+  printf -- " Replacing devsite slug (escaped) with production URL....... \n"
   sudo -u daemon wp search-replace "nativerank.dev\\/${DEVSITE_SLUG}" "${SITE_URL}" --skip-plugins=w3-total-cache
 
-  printf -- "\033[33m Replacing devsite slug with production (unescaped) URL....... \033[0m"
-  load_spinner
+  printf -- " Replacing devsite slug with production (unescaped) URL....... \n"
   sudo -u daemon wp search-replace "nativerank.dev/${DEVSITE_SLUG}" "${SITE_URL}" --skip-plugins=w3-total-cache
 
-  printf -- "\033[33m Running the same replacements on Less and CSS\n"
-  load_spinner
+  printf -- " Running the same replacements on Less and CSS....... \n"
 
   sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/less/src/ -name "*.less" -exec sed -i "s/nrdevsites.com/nativerank.dev/g" {} +
   sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/less/src/ -name "*.less" -exec sed -i "s/www.nativerank.dev/nativerank.dev/g" {} +
@@ -129,53 +119,53 @@ initiate_lighsailScript() {
 
   sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/css/ -name "*.css" -exec sed -i "s/nativerank.dev\/${DEVSITE_SLUG}//g" {} +
 
-  printf -- "\033[33m Running the same replacements on data.json\n"
-  load_spinner
+  printf -- " Running the same replacements on data.json....... \n"
+
 
   sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/ -name "data.json" -exec sed -i "s/nativerank.dev\/${DEVSITE_SLUG}//g" {} +
 
-  printf -- "\033[33m Running the same replacements for Handlebars templates"
-  load_spinner
+  printf -- " Running the same replacements for Handlebars templates....... \n"
+
   sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/templates/ -name "*.hbs" -exec sed -i "s/nrdevsites.com/nativerank.dev/g" {} +
   sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/templates/ -name "*.hbs" -exec sed -i "s/www.nativerank.dev/nativerank.dev/g" {} +
   sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/templates/ -name "*.hbs" -exec sed -i "s/nativerank.dev\/${DEVSITE_SLUG}/${SITE_URL}/g" {} +
   sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/templates/ -name "*.hbs" -exec sed -i "s/http:\/\/${SITE_URL}/https:\/\/${SITE_URL}/g" {} +
 
-  printf -- "\033[33m Making it secure [http -> https]....... \033[0m"
-  load_spinner
+  printf -- " Making it secure [http -> https]....... \n"
+
   sudo -u daemon wp search-replace "http://${SITE_URL}" "https://${SITE_URL}" --skip-plugins=w3-total-cache
 
-  printf -- "\033[33m Setting site URL in WordPress....... \033[0m"
-  load_spinner
+  printf -- " Setting site URL in WordPress....... \n"
+
   wp config set WP_SITEURL "https://${SITE_URL}"
   wp config set WP_HOME "https://${SITE_URL}"
 
 if [[ $PAGESPEED ]]; then
-  printf -- "\033[33m Adding default Pagespeed configuration....... \033[0m"
-  load_spinner
+  printf -- " Adding default Pagespeed configuration....... \n"
+
 sudo sed -i "s/ModPagespeed on/ModPagespeed on\n\nModPagespeedRespectXForwardedProto on\nModPagespeedLoadFromFileMatch \"^https\?:\/\/${SITE_URL}\/\" \"\/opt\/bitnami\/apps\/wordpress\/htdocs\/\"\n\nModPagespeedLoadFromFileRuleMatch Disallow .\*;\n\nModPagespeedLoadFromFileRuleMatch Allow \\\.css\$;\nModPagespeedLoadFromFileRuleMatch Allow \\\.jpe\?g\$;\nModPagespeedLoadFromFileRuleMatch Allow \\\.png\$;\nModPagespeedLoadFromFileRuleMatch Allow \\\.gif\$;\nModPagespeedLoadFromFileRuleMatch Allow \\\.js\$;\n\nModPagespeedDisallow \"\*favicon\*\"\nModPagespeedDisallow \"\*.svg\"\nModPagespeedDisallow \"\*.mp4\"\nModPagespeedDisallow \"\*.txt\"\nModPagespeedDisallow \"\*.xml\"\n\nModPagespeedInPlaceSMaxAgeSec -1\nModPagespeedLazyloadImagesAfterOnload off/g" /opt/bitnami/apache2/conf/pagespeed.conf
 sudo sed -i "s/inline_css/inline_css,hint_preload_subresources/g" /opt/bitnami/apache2/conf/pagespeed.conf
 fi
 
-  printf -- "\033[33m Removing Bitnami banner....... \033[0m"
-  load_spinner
+  printf -- " Removing Bitnami banner....... \n"
+
   sudo /opt/bitnami/apps/wordpress/bnconfig --disable_banner 1
 
-  printf -- "\033[33m Updating Redis Object Cache WP Plugin....... \033[0m"
+  printf -- " Updating Redis Object Cache WP Plugin....... \n"
   sudo wp plugin update redis-cache --allow-root
 
 # Set right permission
   sudo chown -R daemon:daemon /opt/bitnami/apps/wordpress/htdocs/wp-content/plugins/redis-cache
 
   if [[ $REDIS ]]; then
-    printf -- "\033[33m Setting up and activating Redis Server....... \033[0m"
-    load_spinner
+    printf -- " Setting up and activating Redis Server....... \n"
+
     sudo apt-get install redis-server -y
     sudo -u daemon wp redis enable
   fi
 
-  printf -- "\033[33m Activating WP Rocket plugin and setting WP_CACHE....... \033[0m"
-  load_spinner
+  printf -- " Activating WP Rocket plugin and setting WP_CACHE....... \n"
+
   wp config set WP_CACHE true --raw --type=constant
   sudo -u daemon wp plugin activate wp-rocket
   wp config set WP_ROCKET_CF_API_KEY_HIDDEN true --raw --type=constant
@@ -192,14 +182,14 @@ fi
     wp option patch insert wp_rocket_settings cloudflare_zone_id "$ZONE_ID"
   fi
   
-  printf -- "\033[33m Restarting apache....... \033[0m"
-  load_spinner
+  printf -- " Restarting apache....... \n"
+
   sudo /opt/bitnami/ctlscript.sh restart apache
 }
 
-printf -- "\033[32m  Initiating scripts... \033[0m\n"
+printf -- " Initiating scripts... \n"
 
 initiate_lighsailScript
 wait
-printf -- "\033[32m Successfully migrated ${DEVSITE_SLUG} -> ${SITE_URL}. \033[0m\n"
+printf -- " Successfully migrated ${DEVSITE_SLUG} -> ${SITE_URL}. \n"
 exit 0
