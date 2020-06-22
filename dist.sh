@@ -90,18 +90,18 @@ load_spinner() {
 
 initiate_lighsailScript() {
   PUBLIC_IP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
-  printf -- " Replace PUBLIC IP with production URL....... "
+  printf -- " Replace PUBLIC IP with production URL....... \n"
   sudo -u daemon wp search-replace "${PUBLIC_IP}" "${SITE_URL}" --skip-plugins=w3-total-cache
   sudo -u daemon wp search-replace "nrdevsites.com" "nativerank.dev" --skip-plugins=w3-total-cache
   sudo -u daemon wp search-replace "www.nativerank.dev" "nativerank.dev" --skip-plugins=w3-total-cache
 
-  printf -- " Replacing devsite slug (escaped) with production URL....... "
+  printf -- " Replacing devsite slug (escaped) with production URL....... \n"
   sudo -u daemon wp search-replace "nativerank.dev\\/${DEVSITE_SLUG}" "${SITE_URL}" --skip-plugins=w3-total-cache
 
-  printf -- " Replacing devsite slug with production (unescaped) URL....... "
+  printf -- " Replacing devsite slug with production (unescaped) URL....... \n"
   sudo -u daemon wp search-replace "nativerank.dev/${DEVSITE_SLUG}" "${SITE_URL}" --skip-plugins=w3-total-cache
 
-  printf -- " Running the same replacements on Less and CSS\n"
+  printf -- " Running the same replacements on Less and CSS....... \n"
 
   sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/less/src/ -name "*.less" -exec sed -i "s/nrdevsites.com/nativerank.dev/g" {} +
   sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/less/src/ -name "*.less" -exec sed -i "s/www.nativerank.dev/nativerank.dev/g" {} +
@@ -119,52 +119,52 @@ initiate_lighsailScript() {
 
   sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/css/ -name "*.css" -exec sed -i "s/nativerank.dev\/${DEVSITE_SLUG}//g" {} +
 
-  printf -- " Running the same replacements on data.json\n"
+  printf -- " Running the same replacements on data.json....... \n"
 
 
   sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/ -name "data.json" -exec sed -i "s/nativerank.dev\/${DEVSITE_SLUG}//g" {} +
 
-  printf -- " Running the same replacements for Handlebars templates"
+  printf -- " Running the same replacements for Handlebars templates....... \n"
 
   sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/templates/ -name "*.hbs" -exec sed -i "s/nrdevsites.com/nativerank.dev/g" {} +
   sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/templates/ -name "*.hbs" -exec sed -i "s/www.nativerank.dev/nativerank.dev/g" {} +
   sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/templates/ -name "*.hbs" -exec sed -i "s/nativerank.dev\/${DEVSITE_SLUG}/${SITE_URL}/g" {} +
   sudo find /home/bitnami/apps/wordpress/htdocs/wp-content/themes/yootheme_child/templates/ -name "*.hbs" -exec sed -i "s/http:\/\/${SITE_URL}/https:\/\/${SITE_URL}/g" {} +
 
-  printf -- " Making it secure [http -> https]....... "
+  printf -- " Making it secure [http -> https]....... \n"
 
   sudo -u daemon wp search-replace "http://${SITE_URL}" "https://${SITE_URL}" --skip-plugins=w3-total-cache
 
-  printf -- " Setting site URL in WordPress....... "
+  printf -- " Setting site URL in WordPress....... \n"
 
   wp config set WP_SITEURL "https://${SITE_URL}"
   wp config set WP_HOME "https://${SITE_URL}"
 
 if [[ $PAGESPEED ]]; then
-  printf -- " Adding default Pagespeed configuration....... "
+  printf -- " Adding default Pagespeed configuration....... \n"
 
 sudo sed -i "s/ModPagespeed on/ModPagespeed on\n\nModPagespeedRespectXForwardedProto on\nModPagespeedLoadFromFileMatch \"^https\?:\/\/${SITE_URL}\/\" \"\/opt\/bitnami\/apps\/wordpress\/htdocs\/\"\n\nModPagespeedLoadFromFileRuleMatch Disallow .\*;\n\nModPagespeedLoadFromFileRuleMatch Allow \\\.css\$;\nModPagespeedLoadFromFileRuleMatch Allow \\\.jpe\?g\$;\nModPagespeedLoadFromFileRuleMatch Allow \\\.png\$;\nModPagespeedLoadFromFileRuleMatch Allow \\\.gif\$;\nModPagespeedLoadFromFileRuleMatch Allow \\\.js\$;\n\nModPagespeedDisallow \"\*favicon\*\"\nModPagespeedDisallow \"\*.svg\"\nModPagespeedDisallow \"\*.mp4\"\nModPagespeedDisallow \"\*.txt\"\nModPagespeedDisallow \"\*.xml\"\n\nModPagespeedInPlaceSMaxAgeSec -1\nModPagespeedLazyloadImagesAfterOnload off/g" /opt/bitnami/apache2/conf/pagespeed.conf
 sudo sed -i "s/inline_css/inline_css,hint_preload_subresources/g" /opt/bitnami/apache2/conf/pagespeed.conf
 fi
 
-  printf -- " Removing Bitnami banner....... "
+  printf -- " Removing Bitnami banner....... \n"
 
   sudo /opt/bitnami/apps/wordpress/bnconfig --disable_banner 1
 
-  printf -- " Updating Redis Object Cache WP Plugin....... "
+  printf -- " Updating Redis Object Cache WP Plugin....... \n"
   sudo wp plugin update redis-cache --allow-root
 
 # Set right permission
   sudo chown -R daemon:daemon /opt/bitnami/apps/wordpress/htdocs/wp-content/plugins/redis-cache
 
   if [[ $REDIS ]]; then
-    printf -- " Setting up and activating Redis Server....... "
+    printf -- " Setting up and activating Redis Server....... \n"
 
     sudo apt-get install redis-server -y
     sudo -u daemon wp redis enable
   fi
 
-  printf -- " Activating WP Rocket plugin and setting WP_CACHE....... "
+  printf -- " Activating WP Rocket plugin and setting WP_CACHE....... \n"
 
   wp config set WP_CACHE true --raw --type=constant
   sudo -u daemon wp plugin activate wp-rocket
@@ -182,7 +182,7 @@ fi
     wp option patch insert wp_rocket_settings cloudflare_zone_id "$ZONE_ID"
   fi
   
-  printf -- " Restarting apache....... "
+  printf -- " Restarting apache....... \n"
 
   sudo /opt/bitnami/ctlscript.sh restart apache
 }
