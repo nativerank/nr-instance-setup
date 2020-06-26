@@ -162,23 +162,12 @@ fi
 
   sudo /opt/bitnami/apps/wordpress/bnconfig --disable_banner 1
 
-  printf -- " Updating Redis Object Cache WP Plugin....... \n"
-  sudo -u daemon wp plugin update redis-cache
-
-  if [[ $REDIS ]]; then
-    printf -- " Setting up and activating Redis Server....... \n"
-
-    sudo apt-get install redis-server -y
-    sudo -u daemon wp redis enable
-  fi
-
-  printf -- " Activating WP Rocket plugin and setting WP_CACHE....... \n"
+  printf -- " Configuring WP Rocket plugin and setting WP_CACHE....... \n"
+  wp redis disable
 
   wp config set WP_CACHE true --raw --type=constant
-  sudo -u daemon wp plugin activate wp-rocket
   wp config set WP_ROCKET_CF_API_KEY_HIDDEN true --raw --type=constant
-  sudo -u daemon wp cache flush --skip-plugins=w3-total-cache
-
+  
   wp option update wp_rocket_settings "$WP_ROCKET_SETTINGS" --format=json
   ZONE_ID=$(curl -X POST -H "Content-Type: application/json" -d "{\"domain\": \"${SITE_URL}\"}" https://nativerank.dev/cloudflareapi/zone_id)
 
@@ -190,6 +179,21 @@ fi
     wp option patch insert wp_rocket_settings cloudflare_zone_id "$ZONE_ID"
     wp plugin deactivate cloudflare
   fi
+  
+    printf -- " Updating Redis Object Cache WP Plugin....... \n"
+  sudo -u daemon wp plugin update redis-cache
+
+  if [[ $REDIS ]]; then
+    printf -- " Setting up and activating Redis Server....... \n"
+
+    sudo apt-get install redis-server -y
+    sudo -u daemon wp redis enable
+  fi
+  
+    printf -- " Running wp cache flush and activating WP Rocket....... \n"
+
+  sudo -u daemon wp cache flush --skip-plugins=w3-total-cache
+  sudo -u daemon wp plugin activate wp-rocket
   
   printf -- " Restarting apache....... \n"
 
