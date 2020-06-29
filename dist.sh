@@ -164,6 +164,10 @@ fi
 
   printf -- " Configuring WP Rocket plugin and setting WP_CACHE....... \n"
   wp redis disable
+  
+  if  ! wp plugin is-installed wp-rocket then
+    wp plugin install https://wp-rocket.me/download/126649/9c61671e/
+  fi
 
   wp config set WP_CACHE true --raw --type=constant
   wp config set WP_ROCKET_CF_API_KEY_HIDDEN true --raw --type=constant
