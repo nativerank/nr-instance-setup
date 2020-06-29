@@ -15,7 +15,7 @@ Scripts used to set up the lightsail instance
 ## Additional options
 | option | description |
 | --------|:-----------:|
-| --dev-site=DEVSITE-SLUG | replace DEVSITE-SLUG with devsite slug to override the value from wp options |
+| --dev-slug=DEVSITE-SLUG | replace DEVSITE-SLUG with devsite slug to override the value from wp options |
 | --skip-pagespeed | do not optimize pagespeed config file |
 | --skip-redis | do not install redis-server |
 
