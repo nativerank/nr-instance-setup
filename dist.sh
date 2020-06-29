@@ -174,7 +174,7 @@ fi
   ZONE_ID=$(curl -X POST -H "Content-Type: application/json" -d "{\"domain\": \"${SITE_URL}\"}" https://nativerank.dev/cloudflareapi/zone_id)
 
   if [[ -n "$CLOUDFLARE_API_KEY" ]]; then
-    wp option patch insert wp_rocket_settings cloudflare_api_key "'$CLOUDFLARE_API_KEY'"
+    wp option patch insert wp_rocket_settings cloudflare_api_key $CLOUDFLARE_API_KEY
     fi
   if [[ -n "$ZONE_ID" ]]; then
     wp option patch update wp_rocket_settings do_cloudflare 1
