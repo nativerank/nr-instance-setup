@@ -177,8 +177,8 @@ fi
     echo "$CLOUDFLARE_API_KEY" | wp option patch insert wp_rocket_settings cloudflare_api_key 
     fi
   if [[ -n "$ZONE_ID" ]]; then
-    echo true | wp option patch update wp_rocket_settings do_cloudflare
-    wp option patch insert wp_rocket_settings cloudflare_zone_id "$ZONE_ID"
+    echo 1 | wp option patch update wp_rocket_settings do_cloudflare
+    echo "$ZONE_ID" | wp option patch insert wp_rocket_settings cloudflare_zone_id
     wp plugin deactivate cloudflare
   fi
   
