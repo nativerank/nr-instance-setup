@@ -102,15 +102,15 @@ load_spinner() {
 initiate_lighsailScript() {
   PUBLIC_IP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
   printf -- " Replace PUBLIC IP with production URL....... \n"
-  sudo -u daemon wp search-replace "${PUBLIC_IP}" "${SITE_URL}" --skip-plugins=w3-total-cache
-  sudo -u daemon wp search-replace "nrdevsites.com" "nativerank.dev" --skip-plugins=w3-total-cache
-  sudo -u daemon wp search-replace "www.nativerank.dev" "nativerank.dev" --skip-plugins=w3-total-cache
+  sudo -u daemon wp search-replace "${PUBLIC_IP}" "${SITE_URL}" --skip-plugins=w3-total-cache --all-tables
+  sudo -u daemon wp search-replace "nrdevsites.com" "nativerank.dev" --skip-plugins=w3-total-cache --all-tables
+  sudo -u daemon wp search-replace "www.nativerank.dev" "nativerank.dev" --skip-plugins=w3-total-cache --all-tables
 
   printf -- " Replacing devsite slug (escaped) with production URL....... \n"
-  sudo -u daemon wp search-replace "nativerank.dev\\/${DEVSITE_SLUG}" "${SITE_URL}" --skip-plugins=w3-total-cache
+  sudo -u daemon wp search-replace "nativerank.dev\\/${DEVSITE_SLUG}" "${SITE_URL}" --skip-plugins=w3-total-cache --all-tables
 
   printf -- " Replacing devsite slug with production (unescaped) URL....... \n"
-  sudo -u daemon wp search-replace "nativerank.dev/${DEVSITE_SLUG}" "${SITE_URL}" --skip-plugins=w3-total-cache
+  sudo -u daemon wp search-replace "nativerank.dev/${DEVSITE_SLUG}" "${SITE_URL}" --skip-plugins=w3-total-cache --all-tables
 
   printf -- " Running the same replacements on Less and CSS....... \n"
 
@@ -144,7 +144,7 @@ initiate_lighsailScript() {
 
   printf -- " Making it secure [http -> https]....... \n"
 
-  sudo -u daemon wp search-replace "http://${SITE_URL}" "https://${SITE_URL}" --skip-plugins=w3-total-cache
+  sudo -u daemon wp search-replace "http://${SITE_URL}" "https://${SITE_URL}" --skip-plugins=w3-total-cache --all-tables
 
   printf -- " Setting site URL in WordPress....... \n"
 
